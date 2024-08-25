@@ -55,16 +55,26 @@ print("[i] Model architecture:\n")
 print(str(model.summary()) + "\n\n")
 
 # Compilate the model
-model.compile(optimizer=tf.keras.optimizers.RMSprop(learning_rate=0.005), loss="mse")
+model.compile(
+    optimizer=tf.keras.optimizers.RMSprop(learning_rate=0.005), # Gradient descent optimizer
+    loss="mse"                                                  # Loss functions, in this case mean square error
+)
 
 # Fit the model & return the history of the train
 history = model.fit(
-    X_train_1d, 
-    y_train, 
-    batch_size=16, 
-    epochs=101, 
-    validation_split=0.3,
+    X_train_1d,           # Samples
+    y_train,              # expected output
+    batch_size=16,        # Number of samples before update weight
+    epochs=101,           # Number of times the data set is repeated
+    validation_split=0.3, # Retains 30% of the input data for validation during training
 )
+
+# Epoch 101/101
+# 18/18 [==============================] - 0s 2ms/step - loss: 54.2045 - val_loss: 74.5081
+# ^ why 18?, The dataset has 404 samples, 30% of which we use for validation during training, so we only have 
+# 70% (280 samples) available, and every 16 samples we update the value of the weights, that gives us 17.5 
+# updates per epoch, so we have 18 steps/updates in each epoch
+
 
 # Graph the loss of the train
 

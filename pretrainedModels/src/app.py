@@ -1,65 +1,113 @@
+import os
+
+os.environ['CUDA_VISIBLE_DEVICES'] = '-1'
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
+
 import numpy
 import keras
 
-filepath = "./b.png"
+def resNetDemostration(filepath):
+    model = keras.applications.resnet50.ResNet50()
 
-image = keras.preprocessing.image.load_img(filepath, target_size=(224, 224))
+    image = keras.preprocessing.image.load_img(filepath, target_size=(224, 224))
+    image_array = keras.preprocessing.image.img_to_array(image)
+    image_array = numpy.expand_dims(image_array, axis=0)  # Add dimension
+    image_array = keras.applications.resnet50.preprocess_input(image_array)
 
-## RESNET50
+    predictions = model.predict(image_array)
 
-model = keras.applications.resnet50.ResNet50(
-                                                                    include_top=True,
-                                                                    weights='imagenet',
-                                                                    input_tensor=None,
-                                                                    input_shape=None,
-                                                                    pooling=None,
-                                                                    classes=1000,
-                                                                    classifier_activation='softmax',
-                                                                )
+    print("[i]ResNet50:")
 
-image_array = keras.preprocessing.image.img_to_array(image)
-image_array = numpy.expand_dims(image_array, axis=0)  # Add dimension
-image_array = keras.applications.resnet50.preprocess_input(image_array)
+    decoded_predictions = keras.applications.resnet50.decode_predictions(predictions, top=5)
+    for i, (_id, label, score) in enumerate(decoded_predictions[0]):
+        print(f"{i + 1}: {label} ({score:.2f})")
 
-predictions = model.predict(image_array)
+def vgg16Demostration(filepath):
+    model = keras.applications.VGG16()
 
-print("[i]ResNet50:")
+    image = keras.preprocessing.image.load_img(filepath, target_size=(224, 224))
+    image_array = keras.preprocessing.image.img_to_array(image)
+    image_array = numpy.expand_dims(image_array, axis=0)  # Add dimension
+    image_array = keras.applications.vgg16.preprocess_input(image_array)
 
-decoded_predictions = keras.applications.resnet50.decode_predictions(predictions, top=5)
-for i, (imagenet_id, label, score) in enumerate(decoded_predictions[0]):
-    print(f"{i + 1}: {label} ({score:.2f})")
+    predictions = model.predict(image_array)
 
-### VGG16
+    print("[i]VGG16:")
 
-model = keras.applications.VGG16()
+    decoded_predictions = keras.applications.vgg16.decode_predictions(predictions, top=5)
+    for i, (_id, label, score) in enumerate(decoded_predictions[0]):
+        print(f"{i + 1}: {label} ({score:.2f})")
 
-image_array = keras.preprocessing.image.img_to_array(image)
-image_array = numpy.expand_dims(image_array, axis=0)  # Add dimension
-image_array = keras.applications.vgg16.preprocess_input(image_array)
+def vgg19Demostration(filepath):
+    model = keras.applications.VGG19()
 
-predictions = model.predict(image_array)
+    image = keras.preprocessing.image.load_img(filepath, target_size=(224, 224))
+    image_array = keras.preprocessing.image.img_to_array(image)
+    image_array = numpy.expand_dims(image_array, axis=0)  # Add dimension
+    image_array = keras.applications.vgg19.preprocess_input(image_array)
 
-print("[i]VGG16:")
+    predictions = model.predict(image_array)
 
-decoded_predictions = keras.applications.vgg16.decode_predictions(predictions, top=5)
-for i, (imagenet_id, label, score) in enumerate(decoded_predictions[0]):
-    print(f"{i + 1}: {label} ({score:.2f})")
+    print("[i]VGG19:")
 
-### INCEPTION_V3
+    decoded_predictions = keras.applications.vgg19.decode_predictions(predictions, top=5)
+    for i, (_id, label, score) in enumerate(decoded_predictions[0]):
+        print(f"{i + 1}: {label} ({score:.2f})")
 
-model = keras.applications.InceptionV3()
+def inceptionV3Demostration(filepath):
+    model = keras.applications.InceptionV3()
 
-image = keras.preprocessing.image.load_img(filepath, target_size=(299, 299))
-image_array = keras.preprocessing.image.img_to_array(image)
-image_array = numpy.expand_dims(image_array, axis=0)
-print(f"Forma del tensor final: {image_array.shape}")
-image_array = keras.applications.inception_v3.preprocess_input(image_array)
-print(f"Forma del tensor final: {image_array.shape}")
+    image = keras.preprocessing.image.load_img(filepath, target_size=(299, 299))
+    image_array = keras.preprocessing.image.img_to_array(image)
+    image_array = numpy.expand_dims(image_array, axis=0)
+    image_array = keras.applications.inception_v3.preprocess_input(image_array)
 
-predictions = model.predict(image_array)
+    predictions = model.predict(image_array)
 
-print("[i]InceptionV3:")
+    print("[i]InceptionV3:")
 
-decoded_predictions = keras.applications.inception_v3.decode_predictions(predictions, top=5)
-for i, (imagenet_id, label, score) in enumerate(decoded_predictions[0]):
-    print(f"{i + 1}: {label} ({score:.2f})")
+    decoded_predictions = keras.applications.inception_v3.decode_predictions(predictions, top=5)
+    for i, (_id, label, score) in enumerate(decoded_predictions[0]):
+        print(f"{i + 1}: {label} ({score:.2f})")
+
+def efficientNetV2B0Demostration(filepath):
+    model = keras.applications.EfficientNetV2B0()
+
+    image = keras.preprocessing.image.load_img(filepath, target_size=(224, 224))
+    image_array = keras.preprocessing.image.img_to_array(image)
+    image_array = numpy.expand_dims(image_array, axis=0)
+    image_array = keras.applications.efficientnet_v2.preprocess_input(image_array)
+
+    predictions = model.predict(image_array)
+
+    print("[i]EfficientNetV2B0:")
+
+    decoded_predictions = keras.applications.efficientnet_v2.decode_predictions(predictions, top=5)
+    for i, (_id, label, score) in enumerate(decoded_predictions[0]):
+        print(f"{i + 1}: {label} ({score:.2f})")
+
+
+def efficientNetV2LDemostration(filepath):
+    model = keras.applications.EfficientNetV2L()
+
+    image = keras.preprocessing.image.load_img(filepath, target_size=(480, 480))
+    image_array = keras.preprocessing.image.img_to_array(image)
+    image_array = numpy.expand_dims(image_array, axis=0)
+    image_array = keras.applications.efficientnet_v2.preprocess_input(image_array)
+
+    predictions = model.predict(image_array)
+
+    print("[i]EfficientNetV2L:")
+
+    decoded_predictions = keras.applications.efficientnet_v2.decode_predictions(predictions, top=5)
+    for i, (_id, label, score) in enumerate(decoded_predictions[0]):
+        print(f"{i + 1}: {label} ({score:.2f})")
+
+if __name__ == '__main__':
+    filepath = "./a.png"
+    resNetDemostration(filepath)
+    vgg16Demostration(filepath)
+    vgg19Demostration(filepath)
+    inceptionV3Demostration(filepath)
+    efficientNetV2B0Demostration(filepath)
+    efficientNetV2LDemostration(filepath)

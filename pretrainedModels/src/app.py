@@ -6,6 +6,8 @@ os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 import numpy
 import keras
 
+import cv2
+
 def resNetDemostration(filepath):
     model = keras.applications.resnet50.ResNet50()
 
@@ -104,10 +106,38 @@ def efficientNetV2LDemostration(filepath):
         print(f"{i + 1}: {label} ({score:.2f})")
 
 if __name__ == '__main__':
-    filepath = "./a.png"
-    resNetDemostration(filepath)
-    vgg16Demostration(filepath)
-    vgg19Demostration(filepath)
-    inceptionV3Demostration(filepath)
-    efficientNetV2B0Demostration(filepath)
-    efficientNetV2LDemostration(filepath)
+    running = True
+    while running:
+        cap = cv2.VideoCapture(0)
+        if not cap.isOpened():
+            print("No se pudo acceder a la cámara")
+            exit()
+
+        while True:
+            ret, frame = cap.read()
+
+            if ret:
+                cv2.imshow("Foto", frame)
+
+                key = cv2.waitKey(1) & 0xFF
+
+                if key == 27:#Escape to exit
+                    running = False
+                    break
+
+                if key == 32:#Space to screenshot
+                    cv2.imwrite("./camCapture.png", frame)
+                    print("Foto capturada y guardada")
+                    break
+
+        cap.release()
+        cv2.destroyAllWindows()
+
+        if running:    
+            filepath = "./camCapture.png"
+            resNetDemostration(filepath)
+            vgg16Demostration(filepath)
+            vgg19Demostration(filepath)
+            inceptionV3Demostration(filepath)
+            efficientNetV2B0Demostration(filepath)
+            efficientNetV2LDemostration(filepath)

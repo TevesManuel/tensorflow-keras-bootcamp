@@ -1,11 +1,11 @@
 import numpy
 import keras
 
-filepath = "./c.png"
+filepath = "./b.png"
 
 image = keras.preprocessing.image.load_img(filepath, target_size=(224, 224))
 
-### RESNET50
+## RESNET50
 
 model = keras.applications.resnet50.ResNet50(
                                                                     include_top=True,
@@ -49,13 +49,12 @@ for i, (imagenet_id, label, score) in enumerate(decoded_predictions[0]):
 
 model = keras.applications.InceptionV3()
 
-image = keras.preprocessing.image.load_img(filepath, target_size=(299, 229))
+image = keras.preprocessing.image.load_img(filepath, target_size=(299, 299))
 image_array = keras.preprocessing.image.img_to_array(image)
 image_array = numpy.expand_dims(image_array, axis=0)
 print(f"Forma del tensor final: {image_array.shape}")
 image_array = keras.applications.inception_v3.preprocess_input(image_array)
 print(f"Forma del tensor final: {image_array.shape}")
-
 
 predictions = model.predict(image_array)
 
